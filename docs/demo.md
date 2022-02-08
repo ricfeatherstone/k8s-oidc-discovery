@@ -72,3 +72,11 @@ KUBECONFIG=.kube/aws make jwt-claims
 KUBECONFIG=.kube/gcp make jwt-claims
 KUBECONFIG=.kube/azure make jwt-claims
 ```
+
+View the OIDC Discovery Document and JWKS
+
+```shell
+KUBECONFIG=.kube/aws make oidc-discovery
+KUBECONFIG=.kube/gcp make oidc-discovery
+KUBECONFIG=.kube/azure make oidc-discovery
+```

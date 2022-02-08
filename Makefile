@@ -46,6 +46,10 @@ jwt-claims:
 	oidc-demo/bin/claims \
 		-jwt $$(kubectl exec $$(kubectl get po -l=app.kubernetes.io/name=oidc-discovery-demo -oname) -- cat $(TOKEN))
 
+oidc-discovery:
+	oidc-demo/bin/oidc-discovery \
+		-jwt $$(kubectl exec $$(kubectl get po -l=app.kubernetes.io/name=oidc-discovery-demo -oname) -- cat $(TOKEN))
+
 terraform-init:
 	cd terraform && terraform init
 
@@ -85,6 +89,7 @@ help:
 	@echo "  $(cyan)eks-fingerprint$(reset)        - Get the Fingerprint for the AWS Issuer"
 	@echo "  $(cyan)aks-fingerprint$(reset)        - Get the Fingerprint for the Azure Issuer"
 	@echo "  $(cyan)jwt-claims$(reset)             - Retrieve the ServiceAccount Token and Display the Claims"
+	@echo "  $(cyan)oidc-discovery$(reset)         - Retrieve the ServiceAccount Token and Display the Discovery Document and JWKs"
 	@echo "$(bold)Terraform:$(reset)"
 	@echo "  $(cyan)terraform-init$(reset)         - Run Terraform init"
 	@echo "  $(cyan)terraform-plan$(reset)         - Run Terraform plan"
