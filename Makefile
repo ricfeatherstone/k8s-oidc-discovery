@@ -72,6 +72,9 @@ delete-%:
   		KUBECONFIG=$$i kubectl delete -k manifests/$*/; \
   	done
 
+list-buckets:
+	kubectl exec $$(kubectl get po -l=app.kubernetes.io/name=$(NAME) -oname) -- aws s3 ls
+
 help:
 	@echo "$(bold)Usage:$(reset) make $(cyan)<target>$(reset)"
 	@echo
@@ -99,3 +102,4 @@ help:
 	@echo "$(bold)Kubernetes:$(reset)"
 	@echo "  $(cyan)deploy-manual$(reset)          - Deploy resources with manual configuration"
 	@echo "  $(cyan)delete-manual$(reset)          - Delete resources with manual configuration"
+	@echo "  $(cyan)list-buckets$(reset)           - List S3 buckets from within deployed pod"

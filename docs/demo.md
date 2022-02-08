@@ -80,3 +80,17 @@ KUBECONFIG=.kube/aws make oidc-discovery
 KUBECONFIG=.kube/gcp make oidc-discovery
 KUBECONFIG=.kube/azure make oidc-discovery
 ```
+
+## Obtain Dynamic Credentials and List S3 Buckets with Manual Configuration
+
+```shell
+KUBECONFIG=.kube/aws make list-buckets
+KUBECONFIG=.kube/gcp make list-buckets
+KUBECONFIG=.kube/azure make list-buckets
+```
+
+Cleanup 
+
+```shell
+make delete-manual
+```
