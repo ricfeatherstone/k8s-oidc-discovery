@@ -32,3 +32,16 @@ make eks-fingerprint
 make gke-fingerprint
 make aks-fingerprint
 ```
+
+## Update Terraform Variables for the AWS IAM OIDC Provider Configuration
+
+Using the issuer url and fingerprint for each issuer from above, replace the `REPLACE_ME` placeholders in the following 
+files.
+
+* [variables.tf](../terraform/variables.tf)
+
+## Create the AWS IAM Role and OIDC Provider Resources
+
+```shell
+make terraform-apply
+```

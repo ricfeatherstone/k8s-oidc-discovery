@@ -40,6 +40,18 @@ gke-fingerprint:
 aks-fingerprint:
 	$(MAKE) fingerprint SERVER=oidc.prod-aks.azure.com
 
+terraform-init:
+	cd terraform && terraform init
+
+terraform-plan: terraform-init
+	cd terraform && terraform plan -var name=$(NAME)
+
+terraform-%: terraform-init
+	cd terraform && terraform $* -auto-approve -var name=$(NAME)
+
+iam-role-arn:
+	cd terraform && terraform output -raw aws_iam_role_arn
+
 help:
 	@echo "$(bold)Usage:$(reset) make $(cyan)<target>$(reset)"
 	@echo
@@ -56,3 +68,8 @@ help:
 	@echo "  $(cyan)gke-fingerprint$(reset)        - Get the Fingerprint for the GCP Issuer"
 	@echo "  $(cyan)eks-fingerprint$(reset)        - Get the Fingerprint for the AWS Issuer"
 	@echo "  $(cyan)aks-fingerprint$(reset)        - Get the Fingerprint for the Azure Issuer"
+	@echo "$(bold)Terraform:$(reset)"
+	@echo "  $(cyan)terraform-init$(reset)         - Run Terraform init"
+	@echo "  $(cyan)terraform-plan$(reset)         - Run Terraform plan"
+	@echo "  $(cyan)terraform-apply$(reset)        - Run Terraform apply"
+	@echo "  $(cyan)terraform-destroy$(reset)      - Run Terraform destroy"
