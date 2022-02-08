@@ -4,6 +4,8 @@ AWS_KUBECONFIG := .kube/aws
 GCP_KUBECONFIG := .kube/gcp
 AZURE_KUBECONFIG := .kube/azure
 
+TOKEN ?= /var/run/secrets/tokens/sts-token
+
 cyan := $(shell which tput > /dev/null && tput setaf 6 2>/dev/null || echo "")
 reset := $(shell which tput > /dev/null && tput sgr0 2>/dev/null || echo "")
 bold  := $(shell which tput > /dev/null && tput bold 2>/dev/null || echo "")
@@ -39,6 +41,10 @@ gke-fingerprint:
 
 aks-fingerprint:
 	$(MAKE) fingerprint SERVER=oidc.prod-aks.azure.com
+
+jwt-claims:
+	oidc-demo/bin/claims \
+		-jwt $$(kubectl exec $$(kubectl get po -l=app.kubernetes.io/name=oidc-discovery-demo -oname) -- cat $(TOKEN))
 
 terraform-init:
 	cd terraform && terraform init
@@ -78,6 +84,7 @@ help:
 	@echo "  $(cyan)gke-fingerprint$(reset)        - Get the Fingerprint for the GCP Issuer"
 	@echo "  $(cyan)eks-fingerprint$(reset)        - Get the Fingerprint for the AWS Issuer"
 	@echo "  $(cyan)aks-fingerprint$(reset)        - Get the Fingerprint for the Azure Issuer"
+	@echo "  $(cyan)jwt-claims$(reset)             - Retrieve the ServiceAccount Token and Display the Claims"
 	@echo "$(bold)Terraform:$(reset)"
 	@echo "  $(cyan)terraform-init$(reset)         - Run Terraform init"
 	@echo "  $(cyan)terraform-plan$(reset)         - Run Terraform plan"

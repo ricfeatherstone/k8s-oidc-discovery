@@ -64,3 +64,11 @@ Replace the `REPLACE_ME` placeholders in the following files.
 ```shell
 make deploy-manual
 ```
+
+View the JWT Claims
+
+```shell
+KUBECONFIG=.kube/aws make jwt-claims
+KUBECONFIG=.kube/gcp make jwt-claims
+KUBECONFIG=.kube/azure make jwt-claims
+```
