@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oidc-discovery-demo
+spec:
+  replicas: 1
+  template:
+    spec:
+      serviceAccountName: oidc-discovery-demo
+      containers:
+        - name: oidc-discovery-demo
+          image: amazon/aws-cli
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AWS_REGION
+              value: eu-west-2
+          command:
+            - /bin/bash
+            - -ec
+            - sleep 15m
+      restartPolicy: Always

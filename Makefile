@@ -52,6 +52,16 @@ terraform-%: terraform-init
 iam-role-arn:
 	cd terraform && terraform output -raw aws_iam_role_arn
 
+deploy-%:
+	for i in $(AWS_KUBECONFIG) $(GCP_KUBECONFIG) $(AZURE_KUBECONFIG); do \
+  		KUBECONFIG=$$i kubectl apply -k manifests/$*/; \
+  	done
+
+delete-%:
+	for i in $(AWS_KUBECONFIG) $(GCP_KUBECONFIG) $(AZURE_KUBECONFIG); do \
+  		KUBECONFIG=$$i kubectl delete -k manifests/$*/; \
+  	done
+
 help:
 	@echo "$(bold)Usage:$(reset) make $(cyan)<target>$(reset)"
 	@echo
@@ -73,3 +83,7 @@ help:
 	@echo "  $(cyan)terraform-plan$(reset)         - Run Terraform plan"
 	@echo "  $(cyan)terraform-apply$(reset)        - Run Terraform apply"
 	@echo "  $(cyan)terraform-destroy$(reset)      - Run Terraform destroy"
+	@echo "  $(cyan)iam-role-arn$(reset)           - Display the AWS IAM Role ARN from the Terraform Output"
+	@echo "$(bold)Kubernetes:$(reset)"
+	@echo "  $(cyan)deploy-manual$(reset)          - Deploy resources with manual configuration"
+	@echo "  $(cyan)delete-manual$(reset)          - Delete resources with manual configuration"

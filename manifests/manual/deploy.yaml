@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oidc-discovery-demo
+  labels:
+    app: oidc-discovery-demo
+spec:
+  replicas: 1
+  template:
+    spec:
+      serviceAccountName: oidc-discovery-demo
+      containers:
+        - name: oidc-discovery-demo
+          image: amazon/aws-cli
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AWS_REGION
+              value: eu-west-2
+            - name: AWS_WEB_IDENTITY_TOKEN_FILE
+              value: /var/run/secrets/tokens/sts-token
+            - name: AWS_ROLE_ARN
+              value: REPLACE_ME
+          command:
+            - /bin/bash
+            - -ec
+            - sleep 15m
+          volumeMounts:
+            - mountPath: /var/run/secrets/tokens
+              name: sts-token
+      restartPolicy: Always
+      volumes:
+        - name: sts-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: sts-token
+                  audience: sts.amazonaws.com
+                  expirationSeconds: 900

@@ -45,3 +45,22 @@ files.
 ```shell
 make terraform-apply
 ```
+
+## Update IAM Role Configuration on Kubernetes Configuration
+
+Obtain the ARN for the `oidc-discovery-demo` IAM Role.
+
+```shell
+make iam-role-arn
+```
+
+Replace the `REPLACE_ME` placeholders in the following files.
+
+* [deploy.yaml](../manifests/manual/deploy.yaml)
+* [sa.yaml](../manifests/webhook-enabled/sa.yaml)
+
+## Deploy with Manual Configuration
+
+```shell
+make deploy-manual
+```
