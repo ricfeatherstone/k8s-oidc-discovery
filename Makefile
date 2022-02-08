@@ -25,6 +25,21 @@ aks-issuer: export KUBECONFIG=$(AZURE_KUBECONFIG)
 aks-issuer:
 	az aks show -n oidc-discovery-demo -g oidc-discovery-demo --only-show-errors | jq -r .oidcIssuerProfile.issuerUrl
 
+build-tools:
+	$(MAKE) -C oidc-demo build-tools
+
+fingerprint:
+	oidc-demo/bin/fingerprint -server $(SERVER)
+
+eks-fingerprint:
+	$(MAKE) fingerprint SERVER=oidc.eks.eu-west-2.amazonaws.com
+
+gke-fingerprint:
+	$(MAKE) fingerprint SERVER=container.googleapis.com
+
+aks-fingerprint:
+	$(MAKE) fingerprint SERVER=oidc.prod-aks.azure.com
+
 help:
 	@echo "$(bold)Usage:$(reset) make $(cyan)<target>$(reset)"
 	@echo
