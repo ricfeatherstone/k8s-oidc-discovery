@@ -127,3 +127,9 @@ Cleanup
 ```shell
 make delete-webhook-enabled uninstall-webhook
 ```
+
+## Cleanup
+
+```shell
+make terraform-destroy clusters-delete
+```
