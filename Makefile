@@ -75,6 +75,23 @@ delete-%:
 list-buckets:
 	kubectl exec $$(kubectl get po -l=app.kubernetes.io/name=$(NAME) -oname) -- aws s3 ls
 
+show-pod:
+	kubectl get po -l=app.kubernetes.io/name=$(NAME) -oyaml
+
+install-webhook: export IMAGE=amazon/amazon-eks-pod-identity-webhook:latest
+install-webhook:
+	for i in $(GCP_KUBECONFIG) $(AZURE_KUBECONFIG); do \
+		KUBECONFIG=$$i kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.0/cert-manager.yaml; \
+		sleep 5; \
+		KUBECONFIG=../$$i $(MAKE) -C aws-pod-identity-webhook cluster-up; \
+	done
+
+uninstall-webhook:
+	for i in $(GCP_KUBECONFIG) $(AZURE_KUBECONFIG); do \
+		KUBECONFIG=../$$i $(MAKE) -C aws-pod-identity-webhook cluster-down; \
+		KUBECONFIG=$$i kubectl delete ns cert-manager; \
+	done
+
 help:
 	@echo "$(bold)Usage:$(reset) make $(cyan)<target>$(reset)"
 	@echo
@@ -102,4 +119,10 @@ help:
 	@echo "$(bold)Kubernetes:$(reset)"
 	@echo "  $(cyan)deploy-manual$(reset)          - Deploy resources with manual configuration"
 	@echo "  $(cyan)delete-manual$(reset)          - Delete resources with manual configuration"
+	@echo "  $(cyan)deploy-webhook-enabled$(reset) - Deploy resources with webhook managed configuration"
+	@echo "  $(cyan)delete-webhook-enabled$(reset) - Delete resources with webhook managed configuration"
 	@echo "  $(cyan)list-buckets$(reset)           - List S3 buckets from within deployed pod"
+	@echo "  $(cyan)show-pod$(reset)               - Display the Pods YAML"
+	@echo "$(bold)AWS Pod Identity Webhook:$(reset)"
+	@echo "  $(cyan)install-webhook$(reset)        - Install the AWS Pod Identity Webhook"
+	@echo "  $(cyan)uninstall-webhook$(reset)      - Uninstall the AWS Pod Identity Webhook"

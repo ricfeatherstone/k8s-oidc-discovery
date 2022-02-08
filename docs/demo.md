@@ -94,3 +94,36 @@ Cleanup
 ```shell
 make delete-manual
 ```
+
+## Obtain Dynamic Credentials and List S3 Buckets Using the AWS Pod Identity Webhook
+
+Deploy the webhook to GKE and AKS
+
+```shell
+make install-webhook
+```
+
+```shell
+make deploy-webhook-enabled
+```
+
+View Pod Configuration
+
+```shell
+KUBECONFIG=.kube/aws make show-pod
+KUBECONFIG=.kube/gcp make show-pod
+KUBECONFIG=.kube/azure make show-pod
+```
+
+
+```shell
+KUBECONFIG=.kube/aws make list-buckets
+KUBECONFIG=.kube/gcp make list-buckets
+KUBECONFIG=.kube/azure make list-buckets
+```
+
+Cleanup
+
+```shell
+make delete-webhook-enabled uninstall-webhook
+```
