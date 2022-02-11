@@ -26,7 +26,7 @@ aks-create: export KUBECONFIG=../.kube/azure
 aks-create: aks-enable
 	az group create -n $(NAME) -l westeurope --only-show-errors
 	az aks create -n $(NAME) -g $(NAME) --enable-oidc-issuer --only-show-errors -y
-	az aks get-credentials -n $(NAME) -g $(NAME) -f .kube/azure
+	az aks get-credentials -n $(NAME) -g $(NAME) -f ../.kube/azure
 
 aks-delete: export KUBECONFIG=../.kube/azure
 aks-delete:
