@@ -17,7 +17,7 @@ make clusters-create
 
 Create an EKS, GKE and AKS cluster, kubeconfig files are stored in the [.kube](../.kube) directory.
 
-At the time of writing the OIDC Issuer feature is in preview and needs to be specifically enabled.
+At the time of writing the AKS OIDC Issuer feature is in preview and needs to be specifically enabled.
 
 ## Retrieve the issuer urls for each cluster.
 
